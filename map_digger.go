@@ -64,8 +64,10 @@ func (d MapDigger) GetNumber(path string) (float64, error) {
 	switch target.(type) {
 	case float64:
 		return target.(float64), nil
+	case int:
+		return float64(target.(int)), nil
 	default:
-		return 0, fmt.Errorf("Incorrect type: %s property is not a string but a %v", path, reflect.TypeOf(target))
+		return 0, fmt.Errorf("Incorrect type: %s property is not a number but a %v", path, reflect.TypeOf(target))
 	}
 }
 

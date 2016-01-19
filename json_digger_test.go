@@ -27,7 +27,7 @@ var data = `
 }
 `
 
-func Test_GetString_Success(t *testing.T) {
+func Test_JSON_GetString_Success(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
@@ -40,7 +40,7 @@ func Test_GetString_Success(t *testing.T) {
 	}
 }
 
-func Test_GetString_IncorrectPath(t *testing.T) {
+func Test_JSON_GetString_IncorrectPath(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
@@ -54,7 +54,7 @@ func Test_GetString_IncorrectPath(t *testing.T) {
 	}
 }
 
-func Test_GetString_IncorrectType(t *testing.T) {
+func Test_JSON_GetString_IncorrectType(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
@@ -68,7 +68,7 @@ func Test_GetString_IncorrectType(t *testing.T) {
 	}
 }
 
-func Test_GetNumber_Success(t *testing.T) {
+func Test_JSON_GetNumber_Success(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
@@ -81,7 +81,7 @@ func Test_GetNumber_Success(t *testing.T) {
 	}
 }
 
-func Test_GetNumber_IncorrectPath(t *testing.T) {
+func Test_JSON_GetNumber_IncorrectPath(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
@@ -95,7 +95,7 @@ func Test_GetNumber_IncorrectPath(t *testing.T) {
 	}
 }
 
-func Test_GetNumber_IncorrectType(t *testing.T) {
+func Test_JSON_GetNumber_IncorrectType(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
@@ -109,7 +109,7 @@ func Test_GetNumber_IncorrectType(t *testing.T) {
 	}
 }
 
-func Test_GetBool_Success(t *testing.T) {
+func Test_JSON_GetBool_Success(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
@@ -122,7 +122,7 @@ func Test_GetBool_Success(t *testing.T) {
 	}
 }
 
-func Test_GetBool_IncorrectPath(t *testing.T) {
+func Test_JSON_GetBool_IncorrectPath(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
@@ -136,7 +136,7 @@ func Test_GetBool_IncorrectPath(t *testing.T) {
 	}
 }
 
-func Test_GetBool_IncorrectType(t *testing.T) {
+func Test_JSON_GetBool_IncorrectType(t *testing.T) {
 	myDigger, err := NewJSONDigger([]byte(data))
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
