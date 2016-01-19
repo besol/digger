@@ -12,11 +12,49 @@ type MapDigger struct {
 }
 
 // NewMapDigger builds a new MapDigger object
-func NewMapDigger(props map[string]interface{}) (Digger, error) {
+func NewMapDigger(props interface{}) (Digger, error) {
+	var normalizedMap map[string]interface{}
+
 	if props == nil {
 		return nil, fmt.Errorf("input map must not be null")
 	}
-	return &MapDigger{props: props}, nil
+	switch props.(type) {
+	case map[string]interface{}:
+		normalizedMap = props.(map[string]interface{})
+	case map[interface{}]interface{}:
+		tmp, err := normalizeValue(props)
+		if err != nil {
+			return nil, fmt.Errorf("could not normalize map: %v", err)
+		}
+		normalizedMap = tmp.(map[string]interface{})
+	default:
+		return nil, fmt.Errorf("unsupported type")
+	}
+	return &MapDigger{props: normalizedMap}, nil
+}
+
+// normalizeValue will build a map[string]interface{} out of a map[interface{}]interface{}
+// (based on https://github.com/moraes/config/blob/master/config.go)
+func normalizeValue(value interface{}) (interface{}, error) {
+	switch value := value.(type) {
+	case map[interface{}]interface{}:
+		node := make(map[string]interface{}, len(value))
+		for k, v := range value {
+			key, ok := k.(string)
+			if !ok {
+				return nil, fmt.Errorf("unsupported map key: %#v", k)
+			}
+			item, err := normalizeValue(v)
+			if err != nil {
+				return nil, fmt.Errorf("unsupported map value: %#v", v)
+			}
+			node[key] = item
+		}
+		return node, nil
+	case bool, float64, int, string:
+		return value, nil
+	}
+	return nil, fmt.Errorf("unsupported type: %T", value)
 }
 
 // GetString digs in and brings you a string (or an error if the path doesn't lead to one)
