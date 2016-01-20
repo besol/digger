@@ -28,7 +28,7 @@ func NewMapDigger(props interface{}) (Digger, error) {
 		}
 		normalizedMap = tmp.(map[string]interface{})
 	default:
-		return nil, fmt.Errorf("unsupported type")
+		return nil, fmt.Errorf("unsupported type: %v", reflect.TypeOf(props))
 	}
 	return &MapDigger{props: normalizedMap}, nil
 }
