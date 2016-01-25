@@ -47,3 +47,14 @@ func (d MultiDigger) GetBool(path string) (bool, error) {
 	}
 	return false, fmt.Errorf("Could not read bool from '%s'", path)
 }
+
+// Get digs in and brings you anything (or an error if the path doesn't lead to a value)
+func (d MultiDigger) Get(path string) (interface{}, error) {
+	for _, digger := range d.diggers {
+		val, err := digger.Get(path)
+		if err == nil {
+			return val, nil
+		}
+	}
+	return false, fmt.Errorf("Could not read bool from '%s'", path)
+}

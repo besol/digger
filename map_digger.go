@@ -59,20 +59,9 @@ func normalizeValue(value interface{}) (interface{}, error) {
 
 // GetString digs in and brings you a string (or an error if the path doesn't lead to one)
 func (d MapDigger) GetString(path string) (string, error) {
-	// split the path
-	nestedKeys := strings.Split(path, pathSeparator)
-	// just the last element
-	lastProp := nestedKeys[len(nestedKeys)-1]
-	// remove it
-	nestedKeys = nestedKeys[:len(nestedKeys)-1]
-	// get last map
-	lastMap, err := d.dig(nestedKeys)
+	target, err := d.Get(path)
 	if err != nil {
 		return "", err
-	}
-	target := lastMap[lastProp]
-	if target == nil {
-		return "", fmt.Errorf("Incorrect path (%s) : %s property does not exist or has nil value", path, lastProp)
 	}
 	switch target.(type) {
 	case string:
@@ -84,20 +73,9 @@ func (d MapDigger) GetString(path string) (string, error) {
 
 // GetNumber digs in and brings you a number (or an error if the path doesn't lead to one)
 func (d MapDigger) GetNumber(path string) (float64, error) {
-	// split the path
-	nestedKeys := strings.Split(path, pathSeparator)
-	// just the last element
-	lastProp := nestedKeys[len(nestedKeys)-1]
-	// remove it
-	nestedKeys = nestedKeys[:len(nestedKeys)-1]
-	// get last map
-	lastMap, err := d.dig(nestedKeys)
+	target, err := d.Get(path)
 	if err != nil {
 		return 0, err
-	}
-	target := lastMap[lastProp]
-	if target == nil {
-		return 0, fmt.Errorf("Incorrect path (%s) : %s property does not exist or has nil value", path, lastProp)
 	}
 	switch target.(type) {
 	case float64:
@@ -111,6 +89,20 @@ func (d MapDigger) GetNumber(path string) (float64, error) {
 
 // GetBool digs in and brings you a boolean (or an error if the path doesn't lead to one)
 func (d MapDigger) GetBool(path string) (bool, error) {
+	target, err := d.Get(path)
+	if err != nil {
+		return false, err
+	}
+	switch target.(type) {
+	case bool:
+		return target.(bool), nil
+	default:
+		return false, fmt.Errorf("Incorrect type: %s property is not a string but a %v", path, reflect.TypeOf(target))
+	}
+}
+
+// Get digs in and brings you anything (or an error if the path doesn't lead to a value)
+func (d MapDigger) Get(path string) (interface{}, error) {
 	// split the path
 	nestedKeys := strings.Split(path, pathSeparator)
 	// just the last element
@@ -126,12 +118,7 @@ func (d MapDigger) GetBool(path string) (bool, error) {
 	if target == nil {
 		return false, fmt.Errorf("Incorrect path (%s) : %s property does not exist or has nil value", path, lastProp)
 	}
-	switch target.(type) {
-	case bool:
-		return target.(bool), nil
-	default:
-		return false, fmt.Errorf("Incorrect type: %s property is not a string but a %v", path, reflect.TypeOf(target))
-	}
+	return target, nil
 }
 
 func (d MapDigger) dig(path []string) (map[string]interface{}, error) {
